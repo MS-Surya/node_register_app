@@ -20,6 +20,10 @@ app.get("/register",(req,resp) => {
     resp.render("register.ejs")
 })
 
+app.get("/login" , (req,res) =>{
+    res.render("login.ejs")
+})
+
 
 app.post("/register", (req, resp) => {
 var name = req.body.name
@@ -35,6 +39,26 @@ var password= req.body.password
         })
     })
 })
+
+
+
+app.post("/login" ,(req,res) => {
+    var email = req.body.email
+    var password= req.body.password
+
+    conn.query(`SELECT * FROM ${table} WHERE email like ? and password = ?`,[email,password], (error,result) => {
+        if(error) throw error
+
+        var qemail = result[0].email
+        var qpass = result[0].password
+            if(qemail == email && qpass == password){
+                res.send("Logged in as: "+result[0].name)
+        }
+    })
+
+
+})
+
 
 
 
